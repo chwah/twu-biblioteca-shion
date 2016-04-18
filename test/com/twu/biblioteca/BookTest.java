@@ -15,4 +15,18 @@ public class BookTest {
         assertTrue(book.getAuthor() == "Test Author");
         assertTrue(book.getYearPublished() == 2016);
     }
+
+    @Test
+    public void bookIsAvailable() {
+        Book book = new Book("Test Title", "Test Author", 2016);
+        book.setCheckedOut(true);
+        assertTrue(book.isAvailable() == false);
+    }
+
+    @Test
+    public void bookIsNotAvailable() {
+        Book book = new Book("Test Title", "Test Author", 2016);
+        book.setCheckedOut(false);
+        assertTrue(book.isAvailable() == true);
+    }
 }

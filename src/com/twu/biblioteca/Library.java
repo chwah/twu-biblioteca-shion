@@ -1,19 +1,22 @@
 package com.twu.biblioteca;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Created by shion on 15/04/2016.
  */
 public class Library {
-    String name;
-    ArrayList<Book> books;
-    final int INPUT_TO_QUIT = 5;
+    private String name;
+    private ArrayList<Book> books;
+    private final int INPUT_TO_QUIT = 5;
 
     Library(String name) {
         this.name = name;
         books = new ArrayList<Book>();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void addBook(Book book) {
@@ -24,16 +27,43 @@ public class Library {
         return books;
     }
 
-    public void listBooks() {
+    public Book getBookWithTitle(String bookTitle) {
         for (Book b : books) {
-            System.out.println(b.getTitle());
+            if (b.getTitle().equalsIgnoreCase(bookTitle)) return b;
         }
+        return null;
+    }
+
+    public void listBooks() {
+        System.out.println("List All Books");
+
+        int counter = 0;
+        for (Book b : books) {
+            if (b.isAvailable()) {
+                counter++;
+                System.out.println(counter + ". " + b.getTitle());
+            }
+        }
+
+        if (counter == 0) System.out.println("There is no book available at the moment.");
+
+        System.out.println();
     }
 
     public void listBooksWithDetails() {
+        System.out.println("List All Books with Details");
+
+        int counter = 0;
         for (Book b : books) {
-            System.out.println(b.toString());
+            if (b.isAvailable()) {
+                counter++;
+                System.out.println(counter + ". " + b.toString());
+            }
         }
+
+        if (counter == 0) System.out.println("There is no book available at the moment.");
+
+        System.out.println();
     }
 
     public void runLibrary() {
@@ -42,12 +72,33 @@ public class Library {
     }
 
     private void runMainMenu() {
-        int input = 0;
+        int input = -1;
         while (input != INPUT_TO_QUIT) {
             showMenu();
-            getMenuInput();
+            input = InputProcessor.getUserInputAsInteger();
+
+            switch (input) {
+                case 1:
+                    listBooks();
+                    break;
+                case 2:
+                    listBooksWithDetails();
+                    break;
+                case 3:
+                    showCheckOutMenu();
+                    break;
+                case 4:
+                    showReturnMenu();
+                    break;
+                case 5:
+                    break;
+                default:
+                    showInvalidInput();
+                    break;
+            }
         }
     }
+
     private void showMenu() {
         String str = "";
         str += "1. List Books\n";
@@ -56,15 +107,51 @@ public class Library {
         str += "4. Return Book\n";
         str += "5. Quit\n\n";
         str += "Input: ";
-
-        System.out.println(str);
+        System.out.print(str);
     }
 
-    private int getMenuInput() {
-        Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
+    private void showInvalidInput() {
+        System.out.println("Select a valid option!\n");
+    }
 
-        return input;
+    private void showCheckOutMenu() {
+        System.out.print("Enter Title to Borrow: ");
+        String bookTitle = InputProcessor.getUserInputAsString();
+        checkOutWithBookTitle(bookTitle);
+        System.out.println();
+    }
+
+    private void showReturnMenu() {
+        System.out.print("Enter Title to Return: ");
+        String bookTitle = InputProcessor.getUserInputAsString();
+        returnWithBookTitle(bookTitle);
+        System.out.println();
+    }
+
+    protected boolean checkOutWithBookTitle(String bookTitle) {
+        Book book = getBookWithTitle(bookTitle);
+
+        if (book != null && book.isAvailable()) {
+            System.out.println("Thank you! Enjoy the book.");
+            book.setCheckedOut(true);
+            return true;
+        } else {
+            System.out.println("The book is not available.");
+            return false;
+        }
+    }
+
+    protected boolean returnWithBookTitle(String bookTitle) {
+        Book book = getBookWithTitle(bookTitle);
+
+        if (book != null && !book.isAvailable()) {
+            System.out.println("Thank you for returning the book.");
+            book.setCheckedOut(false);
+            return true;
+        } else {
+            System.out.println("That is not a valid book to return.");
+            return false;
+        }
     }
 
 }
