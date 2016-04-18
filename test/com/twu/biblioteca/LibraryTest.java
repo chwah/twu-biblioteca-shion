@@ -21,7 +21,6 @@ public class LibraryTest {
     @Test
     public void getListOfBooks() {
         Library library = new Library("Test Library");
-
         Book book1 = new Book("Test Title 1", "Test Author 1", 2016);
         Book book2 = new Book("Test Title 2", "Test Author 2", 2015);
         library.addBook(book1);
@@ -42,10 +41,30 @@ public class LibraryTest {
     }
 
     @Test
+    public void canAddBook() {
+        Library library = new Library("Test Library");
+        Book book = new Book("Available Title", "Test Author", 2016);
+
+        assertTrue(library.addBook(book) != null);
+    }
+
+    @Test
+    public void cannotAddBook() {
+        Library library = new Library("Test Library");
+        Book book1 = new Book("", "Test Author", 2016);
+        Book book2 = new Book("Test Title", "", 2016);
+        Book book3 = new Book("Test Title", "Test Author", 0);
+
+        assertTrue(library.addBook(book1) == null);
+        assertTrue(library.addBook(book2) == null);
+        assertTrue(library.addBook(book3) == null);
+    }
+
+    @Test
     public void successfullyCheckOutBook() {
         Library library = new Library("Test Library");
 
-        Book book = new Book("Available Title", "Test Author 1", 2016);
+        Book book = new Book("Available Title", "Test Author", 2016);
         book.setCheckedOut(false);
         library.addBook(book);
 
@@ -57,7 +76,7 @@ public class LibraryTest {
     public void unsuccessfullyCheckOutBook() {
         Library library = new Library("Test Library");
 
-        Book book = new Book("Unavailable Title", "Test Author 1", 2016);
+        Book book = new Book("Unavailable Title", "Test Author", 2016);
         book.setCheckedOut(true);
         library.addBook(book);
 
@@ -69,7 +88,7 @@ public class LibraryTest {
     public void successfullyReturnBook() {
         Library library = new Library("Test Library");
 
-        Book book = new Book("Unavailable Title", "Test Author 1", 2016);
+        Book book = new Book("Unavailable Title", "Test Author", 2016);
         book.setCheckedOut(true);
         library.addBook(book);
 
@@ -81,7 +100,7 @@ public class LibraryTest {
     public void unsuccessfullyReturnBook() {
         Library library = new Library("Test Library");
 
-        Book book = new Book("Available Title", "Test Author 1", 2016);
+        Book book = new Book("Available Title", "Test Author", 2016);
         book.setCheckedOut(false);
         library.addBook(book);
 

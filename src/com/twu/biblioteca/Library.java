@@ -19,8 +19,12 @@ public class Library {
         return name;
     }
 
-    public void addBook(Book book) {
-        books.add(book);
+    public Book addBook(Book book) {
+        if (book.getTitle().length() > 0 && book.getAuthor().length() > 0 && book.getYearPublished() > 0) {
+            books.add(book);
+            return book;
+        }
+        return null;
     }
 
     public ArrayList<Book> getBooks() {
