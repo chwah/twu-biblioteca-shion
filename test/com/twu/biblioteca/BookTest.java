@@ -20,13 +20,13 @@ public class BookTest {
     public void bookIsAvailable() {
         Book book = new Book("Test Title", "Test Author", 2016);
         book.setCheckedOut(true);
-        assertTrue(book.isAvailable() == false);
+        assertFalse(book.isAvailable());
     }
 
     @Test
     public void bookIsNotAvailable() {
         Book book = new Book("Test Title", "Test Author", 2016);
         book.setCheckedOut(false);
-        assertTrue(book.isAvailable() == true);
+        assertTrue(book.isAvailable());
     }
 }

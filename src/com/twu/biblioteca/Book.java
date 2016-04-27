@@ -43,4 +43,8 @@ public class Book {
         str += "Year Published: " + getYearPublished();
         return str;
     }
+
+    public boolean equals(Book book2) {
+        return getTitle() == book2.getTitle() && getAuthor() == book2.getAuthor() && getYearPublished() == book2.getYearPublished();
+    }
 }

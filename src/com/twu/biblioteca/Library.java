@@ -19,23 +19,23 @@ public class Library {
         return name;
     }
 
-    public Book addBook(Book book) {
+    public void addBook(Book book) throws Exception {
         if (book.getTitle().length() > 0 && book.getAuthor().length() > 0 && book.getYearPublished() > 0) {
             books.add(book);
-            return book;
+            return;
         }
-        return null;
+        throw new Exception("Book not valid");
     }
 
     public ArrayList<Book> getBooks() {
         return books;
     }
 
-    public Book getBookWithTitle(String bookTitle) {
+    public Book getBookWithTitle(String bookTitle) throws Exception {
         for (Book b : books) {
             if (b.getTitle().equalsIgnoreCase(bookTitle)) return b;
         }
-        return null;
+        throw new Exception("Book not found");
     }
 
     public void listBooks() {
@@ -133,29 +133,41 @@ public class Library {
     }
 
     protected boolean checkOutWithBookTitle(String bookTitle) {
-        Book book = getBookWithTitle(bookTitle);
+        Book book;
+        try {
+            book = getBookWithTitle(bookTitle);
 
-        if (book != null && book.isAvailable()) {
-            System.out.println("Thank you! Enjoy the book.");
-            book.setCheckedOut(true);
-            return true;
-        } else {
-            System.out.println("The book is not available.");
-            return false;
+            if (book.isAvailable()) {
+                System.out.println("Thank you! Enjoy the book.");
+                book.setCheckedOut(true);
+                return true;
+            } else {
+                System.out.println("The book is not available.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
         }
+        return false;
     }
 
     protected boolean returnWithBookTitle(String bookTitle) {
-        Book book = getBookWithTitle(bookTitle);
+        Book book;
+        try {
+            book = getBookWithTitle(bookTitle);
 
-        if (book != null && !book.isAvailable()) {
-            System.out.println("Thank you for returning the book.");
-            book.setCheckedOut(false);
-            return true;
-        } else {
-            System.out.println("That is not a valid book to return.");
-            return false;
+            if (!book.isAvailable()) {
+                System.out.println("Thank you for returning the book.");
+                book.setCheckedOut(false);
+                return true;
+            } else {
+                System.out.println("That is not a valid book to return.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
         }
+        return false;
     }
 
 }

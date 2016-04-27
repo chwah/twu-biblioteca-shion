@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by shion on 15/04/2016.
@@ -15,96 +15,92 @@ public class LibraryTest {
         Library library = new Library("Test Library");
 
         assertTrue(library.getName() == "Test Library");
-        assertTrue(library.getBooks().isEmpty() == true);
+        assertTrue(library.getBooks().isEmpty());
     }
 
     @Test
-    public void getListOfBooks() {
+    public void getListOfBooks() throws Exception {
         Library library = new Library("Test Library");
         Book book1 = new Book("Test Title 1", "Test Author 1", 2016);
         Book book2 = new Book("Test Title 2", "Test Author 2", 2015);
+
         library.addBook(book1);
         library.addBook(book2);
 
         ArrayList<Book> books = library.getBooks();
+
         assertTrue(books.size() == 2);
-
-        assertTrue(books.contains(book1) == true);
-        assertTrue(books.get(0).getTitle() == "Test Title 1");
-        assertTrue(books.get(0).getAuthor() == "Test Author 1");
-        assertTrue(books.get(0).getYearPublished() == 2016);
-
-        assertTrue(books.contains(book2) == true);
-        assertTrue(books.get(1).getTitle() == "Test Title 2");
-        assertTrue(books.get(1).getAuthor() == "Test Author 2");
-        assertTrue(books.get(1).getYearPublished() == 2015);
+        assertTrue(books.contains(book1));
+        assertTrue(books.contains(book2));
     }
 
     @Test
-    public void canAddBook() {
+    public void canAddBook() throws Exception {
         Library library = new Library("Test Library");
         Book book = new Book("Available Title", "Test Author", 2016);
 
-        assertTrue(library.addBook(book) != null);
+        library.addBook(book);
+
+        assertTrue(library.getBooks().contains(book));
     }
 
-    @Test
-    public void cannotAddBook() {
+    @Test(expected = Exception.class)
+    public void cannotAddBook() throws Exception {
         Library library = new Library("Test Library");
         Book book1 = new Book("", "Test Author", 2016);
         Book book2 = new Book("Test Title", "", 2016);
         Book book3 = new Book("Test Title", "Test Author", 0);
 
-        assertTrue(library.addBook(book1) == null);
-        assertTrue(library.addBook(book2) == null);
-        assertTrue(library.addBook(book3) == null);
+        library.addBook(book1);
+        library.addBook(book2);
+        library.addBook(book3);
     }
 
     @Test
-    public void successfullyCheckOutBook() {
+    public void successfullyCheckOutBook() throws Exception {
         Library library = new Library("Test Library");
 
         Book book = new Book("Available Title", "Test Author", 2016);
         book.setCheckedOut(false);
         library.addBook(book);
 
-        assertTrue(library.checkOutWithBookTitle("Available Title") == true);
-        assertTrue(book.isAvailable() == false);
+        assertTrue(library.checkOutWithBookTitle("Available Title"));
+        assertFalse(book.isAvailable());
     }
 
     @Test
-    public void unsuccessfullyCheckOutBook() {
+    public void unsuccessfullyCheckOutBook() throws Exception {
         Library library = new Library("Test Library");
 
         Book book = new Book("Unavailable Title", "Test Author", 2016);
         book.setCheckedOut(true);
         library.addBook(book);
 
-        assertTrue(library.checkOutWithBookTitle("Unavailable Title") == false);
-        assertTrue(library.checkOutWithBookTitle("Non-existent Title") == false);
+        assertFalse(library.checkOutWithBookTitle("Unavailable Title"));
+        assertFalse(library.checkOutWithBookTitle("Non-existent Title"));
     }
 
     @Test
-    public void successfullyReturnBook() {
+    public void successfullyReturnBook() throws Exception {
         Library library = new Library("Test Library");
 
         Book book = new Book("Unavailable Title", "Test Author", 2016);
         book.setCheckedOut(true);
         library.addBook(book);
 
-        assertTrue(library.returnWithBookTitle("Unavailable Title") == true);
-        assertTrue(book.isAvailable() == true);
+        assertTrue(library.returnWithBookTitle("Unavailable Title"));
+        assertTrue(book.isAvailable());
     }
 
     @Test
-    public void unsuccessfullyReturnBook() {
+    public void unsuccessfullyReturnBook() throws Exception {
         Library library = new Library("Test Library");
 
         Book book = new Book("Available Title", "Test Author", 2016);
         book.setCheckedOut(false);
         library.addBook(book);
 
-        assertTrue(library.returnWithBookTitle("Available Title") == false);
-        assertTrue(library.returnWithBookTitle("Non-existent Title") == false);
+        assertFalse(library.returnWithBookTitle("Available Title"));
+        assertFalse(library.returnWithBookTitle("Non-existent Title"));
     }
 }
